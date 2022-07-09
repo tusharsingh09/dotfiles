@@ -38,9 +38,9 @@ call plug#end()
 
 colorscheme kanagawa
 
-" Neovide config
-let g:neovide_transparency=0.90
-let g:neovide_cursor_antialiasing=v:true
+" Neovide config (Optional)
+" let g:neovide_transparency=0.90
+" let g:neovide_cursor_antialiasing=v:true
 
 map ` :NvimTreeToggle<Cr>
 map < :BufferLineCyclePrev<Cr>
