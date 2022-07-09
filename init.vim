@@ -12,7 +12,7 @@ set guifont=RobotoMono\ NF:h8
 
 set guicursor+=i:hor20-Cursor/lCursor
 
-call plug#begin('C:/Users/Tushar/AppData/Local/nvim/autoload/plugged')
+call plug#begin('~/.config/nvim/autoload/plugged')
 
 Plug 'andweeb/presence.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
