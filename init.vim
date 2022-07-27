@@ -4,53 +4,53 @@ set shiftwidth=4
 set expandtab
 set encoding=UTF-8
 set formatoptions-=t
-set mouse=a
-set termguicolors
+
 set background=dark
+set nowrap
 
-set guifont=RobotoMono\ NF:h8
+set guicursor=a:underline
 
-set guicursor+=i:hor20-Cursor/lCursor
-
-call plug#begin('~/.config/nvim/autoload/plugged')
+call plug#begin('C:/Users/Tushar/AppData/Local/nvim/autoload/plugged')
 
 Plug 'andweeb/presence.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'windwp/nvim-autopairs'
 Plug 'nvim-lualine/lualine.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
-Plug 'ryanoasis/vim-devicons'
 Plug 'tikhomirov/vim-glsl'
-Plug 'yamatsum/nvim-cursorline'
-Plug 'goolord/alpha-nvim'
 Plug 'karb94/neoscroll.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'projekt0n/github-nvim-theme'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'rebelot/kanagawa.nvim'
-Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'kevinhwang91/nvim-hlslens'
+Plug 'goolord/alpha-nvim'
+Plug 'Mofiqul/vscode.nvim'
 
 call plug#end()
 
-colorscheme kanagawa
+" Colorscheme
+if has('termguicolors')
+    set termguicolors
+endif
+colorscheme vscode
 
-" Neovide config (Optional)
-" let g:neovide_transparency=0.90
-" let g:neovide_cursor_antialiasing=v:true
+" Neovide config
+let g:neovide_transparency=0.90
 
 map ` :NvimTreeToggle<Cr>
 map < :BufferLineCyclePrev<Cr>
 map > :BufferLineCycleNext<Cr>
 map E :CocCommand clangd.inlayHints.toggle<Cr>
 map <C-p> :Telescope find_files<Cr>
+map <C-`> :NvimTreeRefresh<Cr>
 
 autocmd VimEnter * NeoscrollEnableGlobalPM
 
 lua << END
+
+-- Indent line
+vim.opt.list = true
+vim.opt.listchars:append("space:⋅")
 
 -- Search setup
 require('hlslens').setup({
@@ -58,30 +58,6 @@ require('hlslens').setup({
     nearest_only = true,
     nearest_float_when = 'always'
 })
-
--- Indent line setup
-vim.opt.termguicolors = true
-vim.cmd [[highlight IndentBlanklineIndent1 guifg=#E06C75 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent2 guifg=#E5C07B gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent3 guifg=#98C379 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent4 guifg=#56B6C2 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent5 guifg=#61AFEF gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent6 guifg=#C678DD gui=nocombine]]
-
-vim.opt.list = true
-vim.opt.listchars:append("space:⋅")
-
-require("indent_blankline").setup {
-    space_char_blankline = " ",
-    char_highlight_list = {
-        "IndentBlanklineIndent1",
-        "IndentBlanklineIndent2",
-        "IndentBlanklineIndent3",
-        "IndentBlanklineIndent4",
-        "IndentBlanklineIndent5",
-        "IndentBlanklineIndent6",
-    },
-}
 
 require("nvim-tree").setup({
   sort_by = "case_sensitive",
@@ -105,25 +81,39 @@ require("nvim-tree").setup({
 require('neoscroll').setup()
 
 -- Startup
-require'alpha'.setup(require'alpha.themes.dashboard'.config)
+local alpha = require("alpha")
+local dashboard = require("alpha.themes.dashboard")
 
--- Cursorline
-require('nvim-cursorline').setup {
-  cursorline = {
-    enable = true,
-    timeout = 1000,
-    number = false,
-  },
-  cursorword = {
-    enable = true,
-    min_length = 3,
-    hl = { underline = true },
-  }
+dashboard.section.header.val = {
+    "⠀⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣶⣶⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣶⣿⣿⣿⣿⣶⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣶⣶⣿⣿⣿⣷⣶⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⢿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⡿⠿⠛⠻⠿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠛⠿⢿⣿⣿⣿⡇⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⣿⣿⡟⠁⠀⠀⠀⠈⢻⣿⣿⣿⠀⠀⠀⠀⠀⠀⢸⣿⣿⠏⣠⣤⡄⣠⣤⡌⢿⣿⣿⣿⣿⡿⢁⣤⣄⢀⣤⣄⠹⣿⣿⡇⠀⠀⠀⠀⠀⢺⣿⣿⡿⠋⠀⠀⠀⠀⠙⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠛⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⠛⠛⠛⠛⠛⠛⢛⣿⣮⣿⣿⣿⠀⠀⠀⠀⠀⠀⢈⣿⣿⡟⠀⠀⠀⠀⠀⠀⠸⣿⣿⠀⢿⣿⣿⣿⣿⡟⢸⣿⣿⣿⣿⡇⠸⣿⣿⣿⣿⡿⠀⣿⣿⠇⠀⠀⠀⠀⠀⢸⣿⣿⡇⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⠋⠁⠠⢴⣾⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣧⡀⠀⠀⠀⢀⣼⣿⣿⣿⣿⣿⣧⡀⠀⠀⠀⢀⣼⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⢻⣿⣆⠀⠙⠿⠟⠋⢀⣾⣿⣿⣿⣿⣷⡀⠈⠻⡿⠋⠁⣰⣿⡟⠀⠀⠀⠀⠀⠀⠀⢿⣿⣷⣄⠀⠀⠀⢀⣰⣿⣿⣿⣿⣿⣿⣷⣶⣦⣤⣄⣼⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣶⣿⣿⣿⣿⠟⠉⠻⣿⣿⣿⣿⣶⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣶⣶⣶⣾⣿⣿⡿⠋⠙⢿⣿⣿⣷⣶⣶⣶⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣷⣾⣿⣿⣿⡟⢻⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣠⣷⡀⢹⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣿⣿⣿⣿⣿⢁⣴⣧⡀⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⢀⣼⣆⢘⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠋⠛⠋⠛⠙⠛⠙⠛⠙⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠛⠙⠛⠙⠛⠛⠋⠛⠋⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠙⠛⠛⠋⠛⠋⠛⠋⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "======================================================================================================",
+    "                                               frosty",
+    "                                           NeoVim - 0.7.2",
+    "                                          Windows 11 Pro",
+    "======================================================================================================"
 }
 
--- Bufferline
-require("bufferline").setup{}
+dashboard.section.buttons.val = {
+    dashboard.button( "c", "  > Find C/C++ Sources", ":cd D:/Tushar/Programming/c/ | Telescope find_files<CR>"),
+    dashboard.button( "a", "  > Find Archeus Sources", ":cd D:/Tushar/Programming/ARC | Telescope find_files<CR>"),
+    dashboard.button( "s", "  > Settings" , ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>"),
+    dashboard.button( "q", "  > Quit NVIM", ":qa<CR>"),
+}
 
+alpha.setup(dashboard.config)
 -- Statusline
 require('lualine').setup{
 sections = {
@@ -147,10 +137,10 @@ sections = {
 require("nvim-autopairs").setup {}
 
 -- Treesitter
-require 'nvim-treesitter.install'.compilers = { "gcc" }
+require 'nvim-treesitter.install'.compilers = { "clang" }
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "c", "rust" },
+  ensure_installed = {   },
   sync_install = false,
   highlight = {
     enable = true,
